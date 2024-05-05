@@ -1,0 +1,143 @@
+import zlib
+import os
+
+
+#COMPRESSION SANS PERTE DE DONNEES
+#Fonction compress for folders that contains images and videos 
+
+def compress_folder(folder_path):
+    for filename in os.listdir(folder_path):
+        if filename.endswith('.jpeg') or filename.endswith('.png') or filename.endswith('.mp4'):
+            file_path = os.path.join(folder_path, filename)
+            with open(file_path, 'rb') as f:
+                data = f.read()
+            compressed_data = zlib.compress(data)
+            compressed_file_path = os.path.join(folder_path, filename + '.compressed')
+            with open(compressed_file_path, 'wb') as f:
+                f.write(compressed_data)
+
+folder_to_compress = '/home/zaineb/Desktop/cats'
+compress_folder(folder_to_compress)
+
+#COMPRESSION AVEC PERTE DE DONNEES
+import zlib
+import os
+
+#Fonction compress for folders that contains images and videos 
+
+def compress_folder(folder_path):
+    for filename in os.listdir(folder_path):
+        if filename.endswith('.jpeg') or filename.endswith('.png') or filename.endswith('.mp4'):
+            file_path = os.path.join(folder_path, filename)
+            with open(file_path, 'rb') as f:
+                data = f.read()
+            compressed_data = zlib.compress(data)
+            compressed_file_path = os.path.join(folder_path, filename + '.compressed')
+            with open(compressed_file_path, 'wb') as f:
+                f.write(compressed_data)
+
+folder_to_compress = '/home/zaineb/Desktop/cats'
+compress_folder(folder_to_compress)
+
+#DECOMPRESSION SANS PERTE DE DONNEES
+
+import os
+import zlib
+
+def decompress_file(compressed_file_path):
+    try:
+        with open(compressed_file_path, 'rb') as f:
+            compressed_data = f.read()
+        decompressed_data = zlib.decompress(compressed_data)
+        return decompressed_data
+    except zlib.error as e:
+        print("Error during decompression:", e)
+        return None
+
+def decompress_folder(folder_path):
+    for filename in os.listdir(folder_path):
+        if filename.endswith('.compressed'):
+            compressed_file_path = os.path.join(folder_path, filename)
+            decompressed_file_path = os.path.join(folder_path, os.path.splitext(filename)[0])  # Remove file extension
+            decompressed_data = decompress_file(compressed_file_path)
+            if decompressed_data:
+                # Encode filename to UTF-8 for printing
+                encoded_filename = filename.encode('utf-8', 'ignore').decode('utf-8')
+                with open(decompressed_file_path, 'wb') as f:
+                    f.write(decompressed_data)
+                print(f"Decompression successful for {encoded_filename}.")
+            else:
+                print(f"Decompression failed for {encoded_filename}.")
+
+def main():
+    folder_to_decompress = '/home/zaineb/Desktop/cats'
+    if not os.path.exists(folder_to_decompress):
+        print(f"Folder '{folder_to_decompress}' does not exist.")
+        return
+    decompress_folder(folder_to_decompress)
+
+if __name__ == "__main__":
+    main()
+
+#DECOMPRESSION AVEC PERTE
+
+import os
+import subprocess
+
+def decompress_image(compressed_file_path, output_path):
+    try:
+        subprocess.run(["convert", compressed_file_path, output_path])  # Using ImageMagick's 'convert' command
+        print("Decompression successful.")
+    except Exception as e:
+        print("Error during decompression:", e)
+
+def decompress_audio(compressed_file_path, output_path):
+    try:
+        subprocess.run(["ffmpeg", "-i", compressed_file_path, output_path])  # Using FFmpeg
+        print("Decompression successful.")
+    except Exception as e:
+        print("Error during decompression:", e)
+
+def decompress_video(compressed_file_path, output_path):
+    try:
+        subprocess.run(["ffmpeg", "-i", compressed_file_path, "-c:v", "copy", output_path])  # Using FFmpeg
+        print("Decompression successful.")
+    except Exception as e:
+        print("Error during decompression:", e)
+
+def decompress_text(compressed_file_path, output_path):
+    try:
+        with open(compressed_file_path, 'rb') as f:
+            compressed_data = f.read()
+        with open(output_path, 'wb') as f:
+            f.write(compressed_data)  # Text files are usually uncompressed
+        print("Decompression successful.")
+    except Exception as e:
+        print("Error during decompression:", e)
+
+# Define other decompression functions (pdf, zip, tar, rar, iso, office_doc) similarly...
+
+def decompress_folder(folder_path, output_folder):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    for filename in os.listdir(folder_path):
+        if filename.endswith('.compressed'):
+            compressed_file_path = os.path.join(folder_path, filename)
+            output_file_path = os.path.join(output_folder, os.path.splitext(filename)[0])  # Remove file extension
+            if filename.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+                decompress_image(compressed_file_path, output_file_path)
+            elif filename.endswith(('.mp3', '.wav', '.ogg')):
+                decompress_audio(compressed_file_path, output_file_path)
+            elif filename.endswith(('.mp4', '.avi', '.mov')):
+                decompress_video(compressed_file_path, output_file_path)
+            elif filename.endswith(('.txt', '.csv', '.doc', '.docx', '.xls', '.xlsx')):
+                decompress_text(compressed_file_path, output_file_path)
+            # Add conditions for other file types
+            else:
+                print(f"Unsupported file type: {filename}")
+
+folder_to_decompress = '/home/zaineb/Desktop/animals '  # Remove extra space at the end
+output_folder = '/home/zaineb/Desktop'  # Specify the output folder
+decompress_folder(folder_to_decompress, output_folder)
+
+

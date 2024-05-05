@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Compression de fichiers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        font-family: 'Shanti', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column; /* Pour aligner le contenu verticalement */
+      }
+
+      #background-image {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+      }
+
+      #content {
+        text-align: center;
+        color: white;
+      }
+
+      #file-label {
+        color: black;
+        font-size: 24px; /* Taille de police plus grande */
+        padding: 10px; /* Ajout de marge intérieure */
+        border: 2px solid black; /* Ajout de bordures */
+        border-radius: 10px; /* Bordures arrondies */
+        background-color: white; /* Fond blanc */
+      }
+
+      #compress-button, #decompress-button {
+        font-size: 15px;
+        border: none;
+        text-align: center;
+        background-color: gray; /* Fond gris */
+        color: white;
+        width: 200px;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px; /* Espacement vers le bas */
+      }
+
+      #compress-button {
+        margin-right: 20px; /* Marge à droite pour séparer les boutons */
+      }
+
+      #compress-button:hover, #decompress-button:hover {
+        background-color: lightcyan;
+        cursor: pointer;
+      }
+
+      /* Style pour les paramètres */
+      .parameters {
+        margin-top: 20px; /* Espacement vers le haut */
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      id="background-image"
+      src="https://www.revue-banque.fr/binrepository/1000x603/0c20/1000d563/none/9739565/VYIT/gettyimages-1814687246_221-3323714_20240219171737.jp"
+    />
+    <div id="content">
+      <h1><label id="file-label">Choisir un fichier :</label></h1>
+      <form action="/compress" method="post" enctype="multipart/form-data">
+        <input
+          type="file"
+          name="fileToCompress"
+          accept=".txt,.pdf,.doc,.docx,.jpg,.png,.zip"
+        />
+        <br />
+        <input
+          id="compress-button"
+          type="submit"
+          value="Compresser le fichier"
+        />
+      </form>
+      <form action="/decompress" method="post">
+        <input
+          id="decompress-button"
+          type="submit"
+          value="Décompresser le fichier"
+        />
+      </form>
+      <!-- Paramètres -->
+      <div class="parameters">
+        <p>Taille originale : <span id="original-size">--</span></p>
+        <p>Taille après compression : <span id="compressed-size">--</span></p>
+        <p>Taux de compression : <span id="compression-rate">--</span></p>
+      </div>
+    </div>
+  </body>
+</html>
